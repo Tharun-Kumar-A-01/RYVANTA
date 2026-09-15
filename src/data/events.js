@@ -1,4 +1,4 @@
-export const REGISTRATION_CLOSES_AT = "2026-09-15T23:59:59";
+export const REGISTRATION_CLOSES_AT = "2026-09-15T15:00:00";
 export const EVENT_STARTS_AT = "2026-09-19T09:00:00";
 
 export const EVENTS = [

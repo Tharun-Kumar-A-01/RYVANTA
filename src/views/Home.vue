@@ -99,9 +99,9 @@ const getEventThemeClass = (id) => {
 			<!-- Countdowns -->
 			<div class="countdowns-container">
 				<CountdownCard
-					label="Registration Closes In"
+					label="No more registrations accepted."
 					:target="REGISTRATION_CLOSES_AT"
-					caption="Registration Deadline: 15 September 2026, 11:59 PM IST"
+					caption="Registration Deadline: 15 September 2026, 3:00 PM IST"
 					completeLabel="Registration closed"
 					:emphasis="true"
 				/>

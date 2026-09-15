@@ -1,169 +1,23 @@
-<script setup>
-import { ref, computed, onMounted, watch } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import {
-	ShieldCheckIcon,
-	AlertCircleIcon,
-	CheckCircle2Icon,
-} from "lucide-vue-next";
-import RegistrationForm from "../components/RegistrationForm.vue";
-import { EVENTS } from "../data/events.js";
-import { useRegistrations } from "../composables/useRegistrations.js";
-
-const route = useRoute();
-const router = useRouter();
-const { submitRegistration, existingRegistration, loadError } =
-	useRegistrations();
-
-const receipt = ref(null);
-
-onMounted(() => {
-	if (existingRegistration.value) {
-		receipt.value = existingRegistration.value;
-	}
-});
-
-watch(existingRegistration, (newVal) => {
-	if (newVal) {
-		receipt.value = newVal;
-	}
-});
-
-const activeEventId = computed(() => {
-	const eventId = route.query.event;
-	if (EVENTS.some((e) => e.id === eventId)) {
-		return eventId;
-	}
-	return "hackathon";
-});
-
-const activeEvent = computed(() => {
-	return EVENTS.find((e) => e.id === activeEventId.value) || EVENTS[0];
-});
-
-function selectEvent(id) {
-	router.replace({ query: { event: id } });
-}
-
-function handleRegistered(record) {
-	receipt.value = record;
-	window.scrollTo({ top: 0, behavior: "smooth" });
-}
-</script>
-
 <template>
 	<div class="register-container">
-		<!-- Category Tabs (only show if not registered) -->
-		<div v-if="!receipt" class="tabs-container">
-			<button
-				v-for="event in EVENTS"
-				:key="event.id"
-				type="button"
-				@click="selectEvent(event.id)"
-				:aria-current="event.id === activeEventId ? 'true' : undefined"
-				class="tab-btn"
-				:class="{ 'tab-active': event.id === activeEventId }"
-			>
-				<span class="tab-index">0{{ event.index }}.</span>
-				{{ event.name }}
-			</button>
-		</div>
-
-		<div v-if="loadError && !receipt" role="alert" class="error-banner">
-			<div class="error-content">
-				<AlertCircleIcon class="error-icon" />
-				<span>{{ loadError }}</span>
-			</div>
-			<button
-				type="button"
-				@click="() => window.location.reload()"
-				class="retry-btn"
-			>
-				Retry
-			</button>
-		</div>
-
-		<!-- Permanent Registration Dialog -->
-		<div v-if="receipt" class="success-dialog-container">
-			<div class="success-card">
-				<div class="success-icon-wrapper">
-					<CheckCircle2Icon class="success-icon" />
-				</div>
-				<h2 class="success-title">Registration Made</h2>
-				<p class="success-message">
-					You will receive a confirmation email after verification on or before 17/09/2026.
-				</p>
-
-				<div class="receipt-details">
-					<div class="detail-row">
-						<span class="detail-label">Event</span>
-						<span class="detail-value">{{
-							receipt.eventName
-						}}</span>
-					</div>
-					<div
-						v-if="receipt.domain && receipt.domain !== 'N/A'"
-						class="detail-row"
-					>
-						<span class="detail-label">Domain</span>
-						<span class="detail-value">{{ receipt.domain }}</span>
-					</div>
-					<div class="detail-row">
-						<span class="detail-label">Team Name</span>
-						<span class="detail-value">{{ receipt.teamName }}</span>
-					</div>
-					<div class="detail-row">
-						<span class="detail-label">College</span>
-						<span class="detail-value">{{
-							receipt.institution
-						}}</span>
-					</div>
-					<div class="detail-row">
-						<span class="detail-label">Leader Name</span>
-						<span class="detail-value">{{
-							receipt.leaderName
-						}}</span>
-					</div>
-					<div class="detail-row">
-						<span class="detail-label">Email</span>
-						<span class="detail-value">{{
-							receipt.leaderEmail
-						}}</span>
-					</div>
-					<div class="detail-row">
-						<span class="detail-label">Members</span>
-						<span class="detail-value">{{
-							receipt.members
-								? receipt.members
-										.map((m) => m.name || m.email)
-										.join(", ")
-								: ""
-						}}</span>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- Main Registration Layout (only show if not registered) -->
-		<div v-else class="registration-layout">
-			<div class="form-wrapper">
-				<RegistrationForm
-					:key="activeEventId"
-					:eventId="activeEventId"
-					:submit="submitRegistration"
-					@registered="handleRegistered"
-				/>
-			</div>
-		</div>
+		<h1>Registration Closed</h1>
 	</div>
 </template>
 
 <style scoped>
 .register-container {
-	padding: 1.5rem 0;
+	padding: 1.5rem 1rem;
 	display: flex;
 	flex-direction: column;
 	gap: 2rem;
+	border:1px solid red; 
+	border-radius: 24px;
+	color: red;
+	background-color: color-mix(in srgb, red 10%, transparent 90%);
+}
+
+.register-container h1 {
+	text-align: center;
 }
 
 .tabs-container {
